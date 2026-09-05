@@ -1,0 +1,23 @@
+import {StrictMode, useState} from 'react';
+import {createRoot} from 'react-dom/client';
+import './styles.css';
+
+const email='asanda7jayson@gmail.com';
+const spotify='https://open.spotify.com/artist/1ScQny5BmJf8JzTajKhtpZ';
+const tracks=[{title:'Never Hold Back',id:'2Nabqw5696pCWGee48H6EC'},{title:'Somebody',id:'45Uu8TX3PrLrluFkSJLG7Q'}];
+
+function App(){
+ const [menu,setMenu]=useState(false); const [playing,setPlaying]=useState<string|null>(null);
+ const submit=(e:React.FormEvent<HTMLFormElement>)=>{e.preventDefault();const d=new FormData(e.currentTarget);const subject=encodeURIComponent(`Booking enquiry — ${d.get('name')||'Jayson Hawks'}`);const body=encodeURIComponent(`Name: ${d.get('name')||''}\nEmail: ${d.get('from')||''}\nEvent/date: ${d.get('event')||''}\n\n${d.get('message')||''}`);location.href=`mailto:${email}?subject=${subject}&body=${body}`};
+ return <>
+  <div className="grain"/><header className={menu?'open':''}><a className="logo" href="#top">JAYSON HAWKS</a><button className="hamb" onClick={()=>setMenu(!menu)} aria-label="Menu">{menu?'×':'☰'}</button><nav>{['music','about','bookings'].map(x=><a key={x} href={'#'+x} onClick={()=>setMenu(false)}>{x}</a>)}<a className="accent" href={spotify} target="_blank" rel="noreferrer">Spotify ↗</a></nav></header>
+  <main>
+   <section id="top" className="hero"><div className="hero-art"><div className="orb"/><div className="ghost">JH</div><div className="hero-lines"/></div><div className="hero-copy"><p className="kicker">NEW ARTIST · DURBAN, SOUTH AFRICA</p><h1>Jayson<br/>Hawks</h1><div className="rule"/><p className="tag">Trap / Hip Hop artist. Melodic, hardcore, R&B fusion.</p><div className="actions"><a className="btn accent-bg" href={spotify} target="_blank" rel="noreferrer">Listen on Spotify</a><a className="btn" href="#bookings">Bookings</a></div></div></section>
+   <div className="ticker">{Array(2).fill(['NEVER HOLD BACK','SOMEBODY','TRAP','MELODIC','HARDCORE','R&B FUSION','DURBAN, SA','JAYSON HAWKS']).flat().map((x,i)=><span key={i}>{x}<b>•</b></span>)}</div>
+   <section id="music" className="section"><p className="kicker">/ 01 · MUSIC</p><div className="section-head"><h2>Featured tracks</h2><a className="btn small" href={spotify} target="_blank" rel="noreferrer">Full catalogue ↗</a></div><div className="tracks">{tracks.map((t,i)=><article className="track" key={t.id}><div className="cover"><span>{String(i+1).padStart(2,'0')}</span><strong>JH</strong></div><div className="track-info"><p className="kicker">TRACK 0{i+1}</p><h3>{t.title}</h3><p>Jayson Hawks</p><div><button className="btn small accent-bg" onClick={()=>setPlaying(playing===t.id?null:t.id)}>{playing===t.id?'Now playing':'Play'}</button><a className="btn small" href={`https://open.spotify.com/track/${t.id}`} target="_blank" rel="noreferrer">Spotify ↗</a></div></div>{playing===t.id&&<iframe title={t.title} src={`https://open.spotify.com/embed/track/${t.id}?utm_source=generator&theme=0`} loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"/>}</article>)}</div></section>
+   <section id="about" className="section about"><div><p className="kicker">/ 02 · ABOUT</p><h2>Asanda Nyoka</h2></div><div><p className="lead">I'm Jayson Hawks, real name Asanda Nyoka. My sound is trap music — melodic, hardcore, and R&B fusion — inspired by the energy of South African hip hop.</p><div className="tags"><span>Trap</span><span>Melodic</span><span>Hardcore</span><span>R&B fusion</span></div><p className="muted">Out of Durban, carving a lane in South African trap — new name, heavy sound.</p></div></section>
+   <section id="bookings" className="section bookings"><div><p className="kicker">/ 03 · BOOKINGS</p><h2>Book Jayson Hawks</h2><p className="lead">Shows, features, sessions. Reach out directly — every enquiry hits the inbox.</p><a className="email" href={`mailto:${email}`}>✉ {email}</a></div><form onSubmit={submit}><label>Name<input name="name" required/></label><label>Your email<input name="from" type="email"/></label><label>Event / date<input name="event" placeholder="Show, city, date"/></label><label>Message<textarea name="message" rows={5} required placeholder="Tell me about the gig, feature, or session."/></label><button className="btn accent-bg" type="submit">Send enquiry →</button></form></section>
+  </main><footer><strong>JAYSON HAWKS</strong><span>Trap / Hip Hop · Durban, SA</span><a href={spotify} target="_blank" rel="noreferrer">Spotify ↗</a><span>© {new Date().getFullYear()} Jayson Hawks</span></footer>
+ </>;
+}
+createRoot(document.getElementById('root')!).render(<StrictMode><App/></StrictMode>);
